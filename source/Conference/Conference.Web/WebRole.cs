@@ -68,7 +68,7 @@ namespace Conference.Web.Admin
             config.Logs.ScheduledTransferPeriod = transferPeriod;
             config.Logs.ScheduledTransferLogLevelFilter = logLevel;
 
-            DiagnosticMonitor.Start(cloudStorageAccount, config);
+            //// DiagnosticMonitor.Start(cloudStorageAccount, config);
 
             return base.OnStart();
         }
