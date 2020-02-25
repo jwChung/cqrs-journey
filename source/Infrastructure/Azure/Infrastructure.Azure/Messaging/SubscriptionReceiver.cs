@@ -71,10 +71,11 @@ namespace Infrastructure.Azure.Messaging
             this.topic = topic;
             this.subscription = subscription;
 
-            this.tokenProvider = TokenProvider.CreateSharedSecretTokenProvider(settings.TokenIssuer, settings.TokenAccessKey);
-            this.serviceUri = ServiceBusEnvironment.CreateServiceUri(settings.ServiceUriScheme, settings.ServiceNamespace, settings.ServicePath);
+            var manager = NamespaceManager.CreateFromConnectionString(settings.ConnectionString);
+            this.tokenProvider = manager.Settings.TokenProvider;
+            this.serviceUri = manager.Address;
 
-            var messagingFactory = MessagingFactory.Create(this.serviceUri, tokenProvider);
+            var messagingFactory = MessagingFactory.Create(this.serviceUri, this.tokenProvider);
             this.client = messagingFactory.CreateSubscriptionClient(topic, subscription);
 
             this.namespaceManager = new NamespaceManager(this.serviceUri, this.tokenProvider);
