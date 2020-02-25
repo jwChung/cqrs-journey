@@ -32,7 +32,7 @@ namespace Infrastructure.Azure.Messaging
         private readonly Uri serviceUri;
         private readonly MessagingSettings settings;
         private readonly string topic;
-        private readonly RetryPolicy retryPolicy;
+        private readonly Microsoft.Practices.TransientFaultHandling.RetryPolicy retryPolicy;
         private readonly TopicClient topicClient;
 
         /// <summary>
@@ -53,8 +53,10 @@ namespace Infrastructure.Azure.Messaging
             this.settings = settings;
             this.topic = topic;
 
-            this.tokenProvider = TokenProvider.CreateSharedSecretTokenProvider(settings.TokenIssuer, settings.TokenAccessKey);
-            this.serviceUri = ServiceBusEnvironment.CreateServiceUri(settings.ServiceUriScheme, settings.ServiceNamespace, settings.ServicePath);
+            NamespaceManager manager = NamespaceManager.CreateFromConnectionString(settings.ConnectionString);
+
+            this.tokenProvider = manager.Settings.TokenProvider;
+            this.serviceUri = manager.Address;
 
             try
             {

@@ -56,5 +56,7 @@ namespace Infrastructure.Azure.Messaging
         /// Gets or sets the token access key.
         /// </summary>
         public string TokenAccessKey { get; set; }
+
+        public string ConnectionString { get; set; }
     }
 }
